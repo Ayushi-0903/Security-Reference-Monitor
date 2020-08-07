@@ -1,0 +1,29 @@
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+def threadone():
+  myfile=ABopenfile("testfile.txt", True)
+  if myfile.readat(2,0) == "SE":
+    try:
+      myfile.writeat("Stest1E",0)
+      sleep(3)
+      myfile.close()
+    except RepyArgumentError:
+      pass
+    finally:
+      exitall()
+
+def threadtwo():
+  try:
+    if "testfile.txt.a" in listfiles():
+      removefile("testfile.txt.a")
+    if "testfile.txt.b" in listfiles():
+      removefile("testfile.txt.b")
+    log("ATTACK 13: Removed File\n")
+  finally:
+    exitall()
+
+createthread(threadone)
+createthread(threadtwo)

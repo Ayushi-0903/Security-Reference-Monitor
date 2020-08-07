@@ -1,0 +1,25 @@
+def after_close(t):
+  def for_sleep():
+    sleep(t)
+    log("Operation Unsuccessful as Program Triggered Race Condition / Infinite Loop\n")
+    exitall()
+  return for_sleep
+terminate_program = after_close(4)
+createthread(terminate_program)
+
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+try:
+  myfile.writeat("StestE",100)
+except SeekPastEndOfFileError:
+  pass
+else:
+  log("ATTACK 5: Offset greater than filesize or EOF not handled!\n")
+finally:
+  exitall()
+myfile.close()

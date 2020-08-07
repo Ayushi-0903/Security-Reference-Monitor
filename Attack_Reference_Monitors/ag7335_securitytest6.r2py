@@ -1,0 +1,33 @@
+def after_close(t):
+  def for_sleep():
+    sleep(t)
+    log("Operation Unsuccessful as Program Triggered Race Condition / Infinite Loop\n")
+    exitall()
+  return for_sleep
+terminate_program = after_close(4)
+createthread(terminate_program)
+
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+myfile=ABopenfile("testfile.txt",True)  #AB file Exists
+
+try:
+  myfile.writeat("StestE"*100000,0)
+except:
+  log("ERROR ATTACK - 8| Testcase Failed: Huge File Write!\n")
+
+myfile.close()
+
+myfile=ABopenfile("testfile.txt",True)  #AB file Exists
+
+try:
+  myfile.readat(None,0)
+except:
+  log("ATTACK 8: Testcase Failed: Huge File Read!\n")
+finally:
+  exitall()
+
+myfile.close()

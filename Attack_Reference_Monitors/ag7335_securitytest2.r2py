@@ -1,0 +1,31 @@
+def after_close(t):
+  def for_sleep():
+    sleep(t)
+    log("Operation Unsuccessful as Program Triggered Race Condition / Infinite Loop\n")
+    exitall()
+  return for_sleep
+terminate_program = after_close(10)
+createthread(terminate_program)
+
+
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+myfile.writeat("Test",0)
+
+myfile.close()
+
+myfile=ABopenfile("testfile.txt",True)
+
+try:
+ assert('SE' == myfile.readat(2,0))
+ myfile.close()
+except:
+ myfile.close()
+ log("ATTACK 3: Valid Data File is not retained \n")
+finally:
+  exitall()
